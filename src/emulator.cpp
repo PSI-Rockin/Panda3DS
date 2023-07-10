@@ -1,3 +1,4 @@
+#include "audio/audio.hpp"
 #include "emulator.hpp"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
@@ -54,6 +55,10 @@ Emulator::Emulator() : kernel(cpu, memory, gpu), cpu(memory, kernel), gpu(memory
 
 	config.load(std::filesystem::current_path() / "config.toml");
 
+	if (!Audio::initialize(Audio::Frontend::Type::Null, memory)) {
+		Helpers::panic("Audio: failed to initialize");
+	}
+
 	reset();
 }
 
@@ -65,6 +70,8 @@ void Emulator::reset() {
 	memory.reset();
 	// Kernel must be reset last because it depends on CPU/Memory state
 	kernel.reset();
+
+	Audio::getFrontend()->reset();
 
 	// Reloading r13 and r15 needs to happen after everything has been reset
 	// Otherwise resetting the kernel or cpu might nuke them

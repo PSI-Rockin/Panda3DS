@@ -6,12 +6,6 @@
 #include "memory.hpp"
 #include "result/result.hpp"
 
-namespace DSPPipeType {
-	enum : u32 {
-		Debug = 0, DMA = 1, Audio = 2, Binary = 3
-	};
-}
-
 // Circular dependencies!
 class Kernel;
 
@@ -21,25 +15,16 @@ class DSPService {
 	Kernel& kernel;
 	MAKE_LOG_FUNCTION(log, dspServiceLogger)
 
-	enum class DSPState : u32 {
-		Off, On, Slep
-	};
+	// DSP service event handles
+	using DSPEvent = std::optional<Handle>;
 
 	// Number of DSP pipes
 	static constexpr size_t pipeCount = 8;
-	DSPState dspState;
-
-	// DSP service event handles
-	using DSPEvent = std::optional<Handle>;
 
 	DSPEvent semaphoreEvent;
 	DSPEvent interrupt0;
 	DSPEvent interrupt1;
 	std::array<DSPEvent, pipeCount> pipeEvents;
-	std::array<std::vector<u8>, pipeCount> pipeData; // The data of each pipe
-
-	void resetAudioPipe();
-	std::vector<u8> readPipe(u32 pipe, u32 size);
 
 	DSPEvent& getEventRef(u32 type, u32 pipe);
 	static constexpr size_t maxEventCount = 6;

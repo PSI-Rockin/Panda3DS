@@ -5,6 +5,7 @@
 *.userosscache
 *.sln.docstates
 *.userprefs
+CMakeSettings.json
 
 #Clion Files
 .idea/
