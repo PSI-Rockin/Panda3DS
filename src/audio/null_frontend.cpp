@@ -50,12 +50,16 @@ void NullFrontend::reset() {
 	resetAudioPipe();
 }
 
+void NullFrontend::runAudioFrame() {
+	//NOP
+}
+
 u16 NullFrontend::recvData(u32 regId) {
 	if (regId != 0) {
 		Helpers::panic("Audio: invalid regId in null frontend");
 	}
 
-	return 1;
+	return dspState == DSPState::On;
 }
 
 bool NullFrontend::recvDataIsReady(u32 regId) {
@@ -137,7 +141,7 @@ std::vector<u8> NullFrontend::readPipe(u32 pipe, u32 peer, u32 size, u32 buffer)
 	return out;
 }
 
-void NullFrontend::loadComponent(u32 size, u32 programMask, u32 dataMask, u32 buffer) {
+void NullFrontend::loadComponent(std::vector<u8>& data, u32 programMask, u32 dataMask) {
 	//NOP
 }
 

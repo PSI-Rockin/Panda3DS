@@ -80,8 +80,13 @@ void DSPService::loadComponent(u32 messagePointer) {
 	u32 dataMask = mem.read32(messagePointer + 12);
 	u32 buffer = mem.read32(messagePointer + 20);
 
+	std::vector<u8> data(size);
+	for (u32 i = 0; i < size; i++) {
+		data.push_back(mem.read8(buffer + i));
+	}
+
 	log("DSP::LoadComponent (size = %08X, program mask = %X, data mask = %X\n", size, programMask, dataMask);
-	Audio::getFrontend()->loadComponent(size, programMask, dataMask, buffer);
+	Audio::getFrontend()->loadComponent(data, programMask, dataMask);
 
 	mem.write32(messagePointer, IPC::responseHeader(0x11, 2, 2));
 	mem.write32(messagePointer + 4, Result::Success);
@@ -258,14 +263,4 @@ void DSPService::invalidateDCache(u32 messagePointer) {
 	log("DSP::InvalidateDataCache (addr = %08X, size = %08X, process = %X)\n", address, size, process);
 	mem.write32(messagePointer, IPC::responseHeader(0x14, 1, 0));
 	mem.write32(messagePointer + 4, Result::Success);
-}
-
-void DSPService::signalEvents() {
-	for (const DSPEvent& e : pipeEvents) {
-		if (e.has_value()) { kernel.signalEvent(e.value()); }
-	}
-
-	if (semaphoreEvent.has_value()) { kernel.signalEvent(semaphoreEvent.value()); }
-	if (interrupt0.has_value()) { kernel.signalEvent(interrupt0.value()); }
-	if (interrupt1.has_value()) { kernel.signalEvent(interrupt1.value()); }
 }

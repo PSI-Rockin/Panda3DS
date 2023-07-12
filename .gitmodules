@@ -25,3 +25,6 @@
 [submodule "stb"]
 	path = third_party/stb
 	url = https://github.com/nothings/stb
+[submodule "third_party/teakra"]
+	path = third_party/teakra
+	url = https://github.com/wwylele/teakra

@@ -97,7 +97,7 @@ namespace KernelMemoryTypes {
 
 class Memory {
 	u8* fcram;
-	u8* dspRam;
+	u8* dspRam; // Provided to us by Audio
 	u8* vram;  // Provided to the memory class by the GPU class
 
 	u64& cpuTicks; // Reference to the CPU tick counter
@@ -247,5 +247,6 @@ public:
 	u32 getUsedUserMem() { return usedUserMemory; }
 
 	void setVRAM(u8* pointer) { vram = pointer; }
+	void setDSPMem(u8* pointer) { dspRam = pointer; }
 	bool allocateMainThreadStack(u32 size);
 };

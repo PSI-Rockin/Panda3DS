@@ -87,8 +87,6 @@ class ServiceManager {
 	void setGSPSharedMem(u8* ptr) { gsp_gpu.setSharedMem(ptr); }
 	void setHIDSharedMem(u8* ptr) { hid.setSharedMem(ptr); }
 
-	void signalDSPEvents() { dsp.signalEvents(); }
-
 	// Input function wrappers
 	void pressKey(u32 key) { hid.pressKey(key); }
 	void releaseKey(u32 key) { hid.releaseKey(key); }

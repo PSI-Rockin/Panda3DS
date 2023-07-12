@@ -1,29 +1,18 @@
 #pragma once
-#include <array>
+#include "teakra/teakra.h"
 #include "audio/audio.hpp"
 
 namespace Audio {
 
-class NullFrontend : public Frontend {
-	enum class DSPState : u32 {
-		Off, On, Slep
-	};
-
-	// Number of DSP pipes
-	static constexpr size_t pipeCount = 8;
-	DSPState dspState;
-
-	std::array<std::vector<u8>, pipeCount> pipeData; // The data of each pipe
-
-	u8 dspRam[Memory::DSP_RAM_SIZE];
-
-	void resetAudioPipe();
+class LleFrontend : public Frontend {
+	Teakra::Teakra teakra;
+	bool running;
 public:
-	NullFrontend(Memory& mem) : Frontend(mem) {}
+	LleFrontend(Memory& mem);
 
 	void reset() override;
 	void runAudioFrame() override;
-	u8* getDspMemory() override { return dspRam; }
+	u8* getDspMemory() override { return teakra.GetDspMemory().data(); }
 
 	u16 recvData(u32 regId) override;
 	bool recvDataIsReady(u32 regId) override;

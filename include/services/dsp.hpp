@@ -58,6 +58,4 @@ public:
 		Stereo = 1,
 		Surround = 2
 	};
-
-	void signalEvents();
 };

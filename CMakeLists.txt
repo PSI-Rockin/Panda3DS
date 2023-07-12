@@ -57,6 +57,8 @@ add_compile_definitions(BOOST_NO_CXX98_FUNCTION_BASE) # Forbid Boost from using 
 add_library(boost INTERFACE)
 target_include_directories(boost SYSTEM INTERFACE ${Boost_INCLUDE_DIR})
 
+add_subdirectory(third_party/teakra EXCLUDE_FROM_ALL)
+
 set(CRYPTOPP_BUILD_TESTING OFF)
 add_subdirectory(third_party/cryptopp)
 
@@ -93,7 +95,7 @@ set(SOURCE_FILES src/main.cpp src/emulator.cpp src/io_file.cpp src/gl_state.cpp 
                  src/core/CPU/cpu_dynarmic.cpp src/core/CPU/dynarmic_cycles.cpp src/core/memory.cpp
                  src/httpserver.cpp
 )
-set(AUDIO_SOURCE_FILES src/audio/audio.cpp src/audio/null_frontend.cpp
+set(AUDIO_SOURCE_FILES src/audio/audio.cpp src/audio/null_frontend.cpp src/audio/lle_frontend.cpp
 )
 set(CRYPTO_SOURCE_FILES src/core/crypto/aes_engine.cpp)
 set(KERNEL_SOURCE_FILES src/core/kernel/kernel.cpp src/core/kernel/resource_limits.cpp
@@ -150,7 +152,8 @@ set(HEADER_FILES include/emulator.hpp include/helpers.hpp include/opengl.hpp inc
                  include/result/result_gsp.hpp include/result/result_kernel.hpp include/result/result_os.hpp
                  include/crypto/aes_engine.hpp include/metaprogramming.hpp include/PICA/pica_vertex.hpp include/gl_state.hpp
                  include/config.hpp include/services/ir_user.hpp include/httpserver.hpp include/audio/audio.hpp
-                 include/audio/null_frontend.hpp)
+                 include/audio/null_frontend.hpp include/audio/lle_frontend.hpp
+)
 
 set(THIRD_PARTY_SOURCE_FILES third_party/imgui/imgui.cpp
                              third_party/imgui/imgui_draw.cpp
@@ -181,7 +184,7 @@ if(ENABLE_LTO OR ENABLE_USER_BUILD)
   set_target_properties(Alber PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
-target_link_libraries(Alber PRIVATE dynarmic SDL2-static glad cryptopp)
+target_link_libraries(Alber PRIVATE dynarmic SDL2-static glad cryptopp teakra)
 
 if(GPU_DEBUG_INFO)
   target_compile_definitions(Alber PRIVATE GPU_DEBUG_INFO=1)
