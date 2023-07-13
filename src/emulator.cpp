@@ -55,7 +55,7 @@ Emulator::Emulator() : kernel(cpu, memory, gpu), cpu(memory, kernel), gpu(memory
 
 	config.load(std::filesystem::current_path() / "config.toml");
 
-	if (!Audio::initialize(Audio::Frontend::Type::Null, memory)) {
+	if (!Audio::initialize(Audio::Frontend::Type::Lle, memory)) {
 		Helpers::panic("Audio: failed to initialize");
 	}
 

@@ -82,7 +82,7 @@ void DSPService::loadComponent(u32 messagePointer) {
 
 	std::vector<u8> data(size);
 	for (u32 i = 0; i < size; i++) {
-		data.push_back(mem.read8(buffer + i));
+		data[i] = mem.read8(buffer + i);
 	}
 
 	log("DSP::LoadComponent (size = %08X, program mask = %X, data mask = %X\n", size, programMask, dataMask);
@@ -186,7 +186,6 @@ void DSPService::registerInterruptEvents(u32 messagePointer) {
 			mem.write32(messagePointer + 4, Result::Success);
 
 			totalEventCount++;
-			kernel.signalEvent(eventHandle);
 		}
 	}
 }

@@ -6,6 +6,7 @@ namespace Audio {
 
 class LleFrontend : public Frontend {
 	Teakra::Teakra teakra;
+	u32 pipeBaseAddr;
 	bool running;
 public:
 	LleFrontend(Memory& mem);
